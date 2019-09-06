@@ -16,13 +16,20 @@ int main(int argc, char *argv[])
     pthread_t thread;
     pthread_attr_t attr;
     int arg = 42;
-    ulong ret;
+    int ret;
 
+    /*
+     * attr must be initialized.
+     * The pthread API uses opaque objects. Always use init, getter,setter
+     * functions.
+     */
+    pthread_attr_init(&attr);
     int err = pthread_create(&thread, &attr, routine, &arg);
-    qDebug() << "ptherad_create=" << err;
+    qDebug() << "pthread_create=" << err;
 
     err = pthread_join(thread, (void **)&ret);
-    qDebug() << "ptherad_join=" << err;
+    qDebug() << "pthread_join=" << err;
+    qDebug() << "pthread_join retval=" << ret;
 
     return 0;
 }
