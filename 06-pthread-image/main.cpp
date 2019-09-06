@@ -16,13 +16,16 @@ void *effect(void *arg)
     QImage *img = work->image;
 
     ulong size = img->height();
+
+    // Find the horizontal boundary for this thread.
     int h0 = size * (work->rank)     / work->n;
     int h1 = size * (work->rank + 1) / work->n;
 
     qDebug() << "rank" << work->rank << "h0" << h0 << "h1" << h1;
 
     int dr = (255 / work->n * work->rank) % 255;
-    int dg = 0; int db = 0;
+    int dg = 0;
+    int db = 0;
     int r, g, b;
     for (int y = h0; y < h1; y++) {
         //QRgb line = img->scanLine(y);
