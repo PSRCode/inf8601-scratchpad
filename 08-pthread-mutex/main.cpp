@@ -5,6 +5,7 @@ class Temperature {
 public:
     Temperature(int i) : m_temp(i) {
         pthread_mutexattr_t attr;
+        pthread_mutexattr_init(&attr);
         pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_RECURSIVE);
         pthread_mutex_init(&m_mutex, &attr);
         pthread_mutexattr_destroy(&attr);
@@ -19,6 +20,11 @@ public:
     int get() {
         pthread_mutex_lock(&m_mutex);
         int current_temp = m_temp;
+        /*
+         * A second lock on the same mutex is only possible due to the use of
+         * PTHREAD_MUTEX_RECURSIVE. Otherwise the default type (NORMAL) will
+         * deadlock on consecutive lock of the same mutex.
+         */
         pthread_mutex_lock(&m_mutex);
         return current_temp;
     }
