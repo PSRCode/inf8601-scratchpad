@@ -80,6 +80,10 @@ int main(int argc, char *argv[])
         QThread::usleep(2);
     }
 
+    /*
+     * The use of the access_once function ensure that the compiler does not
+     * optimize access of the variable.
+     */
     access_once(work_item.run) = 0;
 
     for (int i = 0; i < n; i++) {
